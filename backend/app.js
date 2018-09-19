@@ -1,14 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
-
-const Post = require('./models/post')
-
+const postsRoutes = require('./routes/posts');
 const app = express();
 
 // mongodb+srv://andres:<PASSWORD>@cluster0-l1plq.mongodb.net/<DB-NAME>?retryWrites=true
-mongoose.connect("mongodb+srv://andres:Q62oWtrT1n0IhWFx@cluster0-l1plq.mongodb.net/node-angular?retryWrites=true")
+mongoose
+    .connect("mongodb+srv://andres:Q62oWtrT1n0IhWFx@cluster0-l1plq.mongodb.net/node-angular?retryWrites=true")
     .then(() =>{
         console.log('Connected to Database!');
     })
@@ -16,10 +14,8 @@ mongoose.connect("mongodb+srv://andres:Q62oWtrT1n0IhWFx@cluster0-l1plq.mongodb.n
         console.log('Connection failed!!!!');
     });
 
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded( { extended: false }));
-
 
 // Headers added to prevent CORS issues
 app.use( (req, res, next) => {
@@ -27,43 +23,10 @@ app.use( (req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 
         'Origin, X-Requested-With, Content-type, Accept');
     res.setHeader('Access-Control-Allow-Methods',
-        'GET, POST, PATCH, DELETE, OPTIONS' );
-
+        'GET, POST, PATCH, PUT, DELETE, OPTIONS' );
     next();
 });
 
-app.post('/api/posts' , (req, res, next) => {
-    // body property added by bodyParser middleware
-
-    const post = new Post({
-        title: req.body.title,
-        content: req.body.content
-    });
-
-    post.save().then( createdPost => {
-        res.status(201).json({
-            message: 'Post added successfully',
-            postId: createdPost._id
-        });
-    })
-   
-});
-
-app.get('/api/posts' , (req, res, next) => {
-    Post.find()
-        .then(documents => {
-            res.status(200).json({
-                message: 'Posts fetched successfully',
-                posts: documents
-            });
-        });
-});
-
-app.delete("/api/posts/:id", (req, res, next) => {
-    Post.deleteOne({ _id: req.params.id }).then(result => {
-      console.log(result);
-      res.status(200).json({ message: "Post deleted!" });
-    });
-});
+app.use('/api/posts', postsRoutes);
 
 module.exports = app;
