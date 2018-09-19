@@ -1,5 +1,5 @@
 export interface Post {
-    id: string;
+    id: string;     // will be created by mongoose automatically
     title: string;
     content: string;
 }
