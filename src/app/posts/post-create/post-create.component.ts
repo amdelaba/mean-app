@@ -21,6 +21,7 @@ export class PostCreateComponent implements OnInit {
       return;
     }
     this.ps.addPost({
+      id: null,
       title: form.value.title, 
       content: form.value.content
     });
