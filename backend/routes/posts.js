@@ -68,15 +68,39 @@ router.put('/:id', multer({ storage: storage }).single("image"), (req, res, next
 	});
 });
 
+
+
 router.get('', (req, res, next) => {
-	Post.find()
+	// + in front to convert to num
+	const pageSize = +req.query.pageSize;
+	const currentPage = +req.query.currentPage;
+
+	//find does not execute the query yet (need to call then())
+	const postQuery = Post.find();
+	let fetchedPosts;
+
+	// If params not in request
+	if (pageSize && currentPage) {
+		postQuery
+			.skip(pageSize * (currentPage - 1))  //skips the first n elements  
+			.limit(pageSize);
+	}
+
+	postQuery
 		.then(documents => {
+			fetchedPosts = documents;
+			return Post.count();
+		})
+		.then(count => {
 			res.status(200).json({
 				message: 'Posts fetched successfully',
-				posts: documents
+				posts: fetchedPosts,
+				maxPosts: count
 			});
 		});
 });
+
+
 
 router.get('/:id', (req, res, next) => {
 	Post.findById(req.params.id).then((post) => {
