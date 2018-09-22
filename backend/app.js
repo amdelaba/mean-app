@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -16,6 +17,9 @@ mongoose
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded( { extended: false }));
+
+// Allows requests to access to /images and forwarded to /backend/images
+app.use("/images", express.static(path.join("backend/images")));
 
 // Headers added to prevent CORS issues
 app.use( (req, res, next) => {
