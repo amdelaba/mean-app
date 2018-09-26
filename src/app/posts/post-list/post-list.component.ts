@@ -1,3 +1,4 @@
+import { AuthService } from './../../auth/auth.service';
 import { PostsService } from './../posts.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Post } from '../post.model';
@@ -12,25 +13,36 @@ import { PageEvent } from '@angular/material';
 export class PostListComponent implements OnInit, OnDestroy {
 
   posts: Post[] = [];
-  private subscription: Subscription;
   isLoading = false;
+  isUserAuthenticated = false;
+  private postsSub: Subscription;
+  private authStatusSub: Subscription;
 
   totalPosts = 0;
   postsPerPage = 4;
   currentPage = 1;
   pageSizeOptions = [1, 2, 5, 10];
 
-  constructor(private ps: PostsService) { }
+  constructor(private ps: PostsService, 
+    private auth: AuthService) { }
 
   ngOnInit() {
     this.isLoading = true;
-    this.subscription =  this.ps.getPostUpdateListener()
+    this.postsSub =  this.ps.getPostUpdateListener()
       .subscribe( ( postData: {posts: Post[], postCount: number} ) => {
         this.posts = postData.posts;
         this.isLoading = false;
         this.totalPosts = postData.postCount;
       });
     this.ps.getPosts(this.postsPerPage, this.currentPage);
+
+    this.isUserAuthenticated = this.auth.getIsAuth();
+    this.authStatusSub = this.auth
+      .getAuthStatusAsListener()
+      .subscribe(isAutheticated => {
+        this.isUserAuthenticated = isAutheticated;
+      });
+
   }
 
   onChangedPage(pageData: PageEvent) {
@@ -48,7 +60,8 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.postsSub.unsubscribe();
+    this.authStatusSub.unsubscribe();
   }
 
 
