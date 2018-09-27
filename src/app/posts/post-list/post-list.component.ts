@@ -59,7 +59,7 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.ps.deletePost(postId).subscribe(() => {
       this.ps.getPosts(this.postsPerPage, this.currentPage);
-    })
+    });
   }
   
   ngOnDestroy() {
