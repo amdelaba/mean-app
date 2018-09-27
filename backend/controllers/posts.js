@@ -89,11 +89,12 @@ exports.updatePost = 	(req, res, next) => {
   });
   Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
     .then(result => {
-    if (result.nModified > 0) {
-      res.status(200).json({ message: "Update Sucessful!" });
-    } else {
-      res.status(401).json({ message: "Update NOT Successful. Not Authorized" });
-    }
+      // console.log(result);
+      if (result.n > 0) {
+        res.status(200).json({ message: "Update Sucessful!" });
+      } else {
+        res.status(401).json({ message: "Update NOT Successful. Not Authorized" });
+      }
   })
   .catch( error => {
     res.status(500).json({ message: "Updating post failed" });
@@ -103,7 +104,7 @@ exports.updatePost = 	(req, res, next) => {
 
 exports.deletePost = (req, res, next) => {
 	Post.deleteOne({ _id: req.params.id, creator: req.userData.userId }).then( result => {
-		console.log(result);
+		// console.log(result);
 		// result.nModified not present in the json with deletion
 		if (result.n > 0) {
 			res.status(200).json({ message: "Deletion Successfull" });

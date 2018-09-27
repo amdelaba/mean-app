@@ -14,6 +14,7 @@ export class PostsService {
   constructor(private http:HttpClient,
     public router: Router) {}
 
+
   getPosts(postsPerPage: number , currentPage: number) {
 
     // `` used for template expressions, still a string
@@ -41,7 +42,7 @@ export class PostsService {
         })
       )
       .subscribe(transformedPostsData => {
-        console.log(transformedPostsData);
+        // console.log(transformedPostsData);
         this.posts = transformedPostsData.posts;
         this.postsUpdated.next({posts: [...this.posts], postCount:transformedPostsData.maxPosts});
       });
