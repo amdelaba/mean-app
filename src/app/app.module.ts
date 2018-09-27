@@ -1,7 +1,5 @@
-import { AuthModule } from './auth/auth.module';
 import { ErrorComponent } from './error/error.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
-import { PostsService } from './posts/posts.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -26,8 +24,7 @@ import { PostsModule } from './posts/posts.module';
     BrowserAnimationsModule,
     HttpClientModule,
     AngularMaterialModule,
-    PostsModule,
-    AuthModule
+    PostsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
