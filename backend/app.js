@@ -8,7 +8,11 @@ const app = express();
 
 // mongodb+srv://andres:<PASSWORD>@cluster0-l1plq.mongodb.net/<DB-NAME>?retryWrites=true
 mongoose
-    .connect("mongodb+srv://andres:Q62oWtrT1n0IhWFx@cluster0-l1plq.mongodb.net/node-angular?retryWrites=true")
+    .connect(
+        "mongodb+srv://andres:" + 
+        process.env.MONGO_ATLAS_PASSWORD + 
+        "@cluster0-l1plq.mongodb.net/node-angular?retryWrites=true"
+    )
     .then(() =>{
         console.log('Connected to Database!');
     })
