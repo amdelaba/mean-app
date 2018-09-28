@@ -6,7 +6,6 @@ const postsRoutes = require('./routes/posts');
 const usersRoutes = require('./routes/users');
 const app = express();
 
-// mongodb+srv://andres:<PASSWORD>@cluster0-l1plq.mongodb.net/<DB-NAME>?retryWrites=true
 mongoose
     .connect(
         "mongodb+srv://andres:" + 
@@ -20,16 +19,14 @@ mongoose
         console.log('Connection failed!!!!');
     });
 
-app.use(bodyParser.json());
+app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded( { extended: false }));
 
 // Allows requests to access to /images and forwarded to /backend/images
+app.use("/images", express.static(path.join(__dirname, "images")));
 
-// DEVELOPMENT
-app.use("/images", express.static(path.join("backend/images")));
-
-// PRODUCTION
-// app.use("/images", express.static(path.join(__dirname, "images")));
+// Allow static access to angular folder
+app.use("/", express.static(path.join(__dirname, "angular-dist")));
 
 
 // Headers added to prevent CORS issues
@@ -45,6 +42,9 @@ app.use( (req, res, next) => {
 app.use('/api/posts', postsRoutes);
 app.use('/api/users', usersRoutes);
 
-
+// Non-api requests should be handled by Angular
+app.use((req, res, next) => {
+    res.sendFile(path.join(__dirname, 'angular-dist', 'index.html'));
+});
 
 module.exports = app;

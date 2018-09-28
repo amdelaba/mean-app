@@ -4,6 +4,7 @@
 /dist
 /tmp
 /out-tsc
+/backend/angular-dist
 
 # dependencies
 /node_modules
@@ -40,4 +41,6 @@ Thumbs.db
 
 # Images uploaded to server
 /backend/images
+/backend/*.zip
+
 nodemon.json

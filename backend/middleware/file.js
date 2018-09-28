@@ -16,12 +16,7 @@ const storage = multer.diskStorage({
 		}
 
 		// path is relative to server.js file 
-
-		// DEVELOPMENT
-		cb(error, "backend/images");
-
-		// PRODUCTION
-		// cb(error, "images");
+		cb(error, "images");
 	},
 
 	filename: (req, file, cb) => {
