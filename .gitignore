@@ -4,6 +4,8 @@
 /dist
 /tmp
 /out-tsc
+/backend/angular-dist
+/backend/*.zip
 
 # dependencies
 /node_modules
