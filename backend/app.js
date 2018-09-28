@@ -24,7 +24,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded( { extended: false }));
 
 // Allows requests to access to /images and forwarded to /backend/images
+
+// DEVELOPMENT
 app.use("/images", express.static(path.join("backend/images")));
+
+// PRODUCTION
+// app.use("/images", express.static(path.join(__dirname, "images")));
+
 
 // Headers added to prevent CORS issues
 app.use( (req, res, next) => {
